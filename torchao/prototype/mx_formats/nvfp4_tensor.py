@@ -595,7 +595,7 @@ def _addmm_nvfp4_dispatch(
         assert b._per_tensor_scale is None and a._per_tensor_scale is None
         scale_result = None
 
- 
+    print("nvfp4 called")
     result = torch._scaled_mm(
         a._data.view(torch.float4_e2m1fn_x2),
         b._data.view(torch.float4_e2m1fn_x2),
