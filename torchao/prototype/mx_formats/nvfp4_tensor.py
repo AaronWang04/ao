@@ -595,6 +595,19 @@ def _addmm_nvfp4_dispatch(
         assert b._per_tensor_scale is None and a._per_tensor_scale is None
         scale_result = None
 
+ 
+    result = torch._scaled_mm(
+        a._data.view(torch.float4_e2m1fn_x2),
+        b._data.view(torch.float4_e2m1fn_x2),
+        a_scale_blocked.view(torch.float8_e4m3fn),
+        b_scale_blocked.view(torch.float8_e4m3fn),
+        bias=bias,
+        out_dtype=a._orig_dtype,
+        scale_result=scale_result,
+    )
+
+    return result
+
     # THIS IS A WORKAROUND:
     # RuntimeError: CUDA error: CUBLAS_STATUS_INVALID_VALUE when calling
     # When we have per-tensor scaling, we need to apply it before bias
